@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 export interface PeriodicElement {
@@ -37,7 +39,9 @@ export class AppComponent implements OnInit {
     'symbol',
     'action',
   ];
-  dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
+  dataSource = new MatTableDataSource<any>();
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   IsSaveEnable: boolean = false;
   IsAdd: boolean = false;
   position: number = 0;
@@ -46,6 +50,9 @@ export class AppComponent implements OnInit {
   symbol: string = '';
 
   getData() {
+    this.dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
     this.dataSource.data.map((items) => {
       items.canEdit = false;
     });
